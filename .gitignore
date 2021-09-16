@@ -1,0 +1,7 @@
+/node_modules
+config.js
+/.vscode
+/hiddenJsonFiles
+/commands/test.js
+/slashCommands/test.js
+/contextCommands/test.js
