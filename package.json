@@ -1,14 +1,14 @@
 {
-  "name": "discordbottemplate",
+  "name": "ticketthreadbot",
   "version": "1.0.0",
-  "description": "Just a template Discord Bot made by TwilightZebby for his own use",
+  "description": "A concept Ticket Support System for D1fterX's Discord Server",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TwilightZebby/DiscordBotTemplate.git"
+    "url": "git+https://github.com/TwilightZebby/TicketThreadBot.git"
   },
   "keywords": [
     "discord",
@@ -20,9 +20,9 @@
   "author": "TwilightZebby",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/TwilightZebby/DiscordBotTemplate/issues"
+    "url": "https://github.com/TwilightZebby/TicketThreadBot/issues"
   },
-  "homepage": "https://github.com/TwilightZebby/DiscordBotTemplate#readme",
+  "homepage": "https://github.com/TwilightZebby/TicketThreadBot#readme",
   "dependencies": {
     "bufferutil": "^4.0.3",
     "discord.js": "^13.1.0",
