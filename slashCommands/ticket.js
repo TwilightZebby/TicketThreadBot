@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Mee6Api = require('mee6-levels-api');
 const { client } = require('../constants.js');
 
 const TicketTypeButtons = [
@@ -98,6 +99,53 @@ module.exports = {
 
 
             return await buttonInteraction.update({ content: `Please select what you want to apply for, using the buttons below.\nApplication status is marked using ✅ for open and ❌ for closed.\nIf you've changed your mind about applying, then feel free to dismiss this message.`, components: applicationButtons });
+        }
+        // Other ticket types
+        else
+        {
+            // Begin Thread creation process
+            await buttonInteraction.update({ content: `⏳ Creating Ticket for you now, please wait...`, components: [] });
+        }
+    },
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Handles the Application Buttons
+     * 
+     * @param {Discord.ButtonInteraction} buttonInteraction
+     */
+    async handleApplicationButtons(buttonInteraction)
+    {
+        // For the Applications with Discord-based requirements (such as length of time on Server, etc), check those
+        const appType = buttonInteraction.customId.split(4);
+
+        // Staff Apps - requires 6 months minimum & Level 10 or higher on Mee6
+        if ( appType === "staff" )
+        {
+            let appMember = await (await client.guilds.fetch(buttonInteraction.guildId)).members.fetch(buttonInteraction.user.id);
+
+            // Member length check
+            if ( (Date.now() - appMember.joinedAt) < 1.577e+10 )
+            {
+                return await buttonInteraction.update({ content: `Sorry, but you are currently not able to apply for Moderator due to not meeting our requirements. (Need to be a member of this server for more than 6 months)\nYou are welcome to try and apply again when you meet this requirement though!`, components: [] });
+            }
+
+            // Mee6 Level check
+            let memberMee6Data = Mee6Api.getUserXp(buttonInteraction.guildId, appMember.user.id);
+            if ( !memberMee6Data || memberMee6Data.level < 10 )
+            {
+                return await buttonInteraction.update({ content: `Sorry, but you are currently not able to apply for Moderator due to not meeting our requirements. (Needs to have at least Level 10 on the Mee6 Bot)\nYou are welcome to try and apply again when you meet this requirement though!`, components: [] });
+            }
         }
     }
 }

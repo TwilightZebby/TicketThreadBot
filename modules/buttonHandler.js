@@ -18,10 +18,16 @@ module.exports = {
         // Left blank for custom implentation depending on use-case,
         // since Buttons are far to customisable lol
 
-        if ( buttonInteraction.customId.includes("ticket") )
+        if ( buttonInteraction.customId.startsWith("ticket") )
         {
             return await TicketModule.handleTicketType(buttonInteraction);
         }
+        else if ( buttonInteraction.customId.startsWith("app") )
+        {
+            return await TicketModule.handleApplicationButtons(buttonInteraction);
+        }
+
+
         return;
     }
 }
