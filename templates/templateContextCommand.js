@@ -1,39 +1,50 @@
+// Imports
 const Discord = require('discord.js');
+//const fs = require('fs');
 const { client } = require('../constants.js');
-
+const CONSTANTS = require('../constants.js');
 
 module.exports = {
-    name: 'commandName',
-    description: `A Description of the command`,
-    
-    // Cooldown is in seconds
+    // Context Command's Name, can be mixed case and allows for spaces
+    // If the command name has a space, use an underscore (_) for the file name
+    name: 'Command Name',
+    // Context Command's description
+    description: `Description`,
+    // Category of Context Command
+    category: 'general',
+
+    // Context Command's Cooldown, in seconds
+    // If not provided or is commented out, will default to 3 seconds
     cooldown: 3,
 
+
     /**
-     * Returns data to be used for registering the Context Command
+     * Returns data used for registering this Context Command
      * 
-     * @returns {Discord.ApplicationCommandData} 
+     * @returns {Discord.ApplicationCommandData}
      */
-    async registerData() {
-
+    registerData()
+    {
         const data = {};
+
+        // Slash Command's Name, Description, and Application Command Type
         data.name = this.name;
-        data.description = "";
-        data.type = ""; // Either "USER" or "MESSAGE"
-
+        data.description = ""; // Left blank otherwise Discord's API will reject
+        data.type = ""; // either "USER" or "MESSAGE", must *not* be left blank
+        
         return data;
-
     },
 
 
+
+
     /**
-     * Entry point that runs the context command
+     * Main function that runs this Context Command
      * 
-     * @param {Discord.ContextMenuInteraction} contextInteraction Context Command Interaction
+     * @param {Discord.ContextMenuInteraction} contextCommand Context Command Interaction
      */
-    async execute(contextInteraction) {
-
-        //.
-
+    async execute(contextCommand)
+    {
+        // .
     }
-}
+};

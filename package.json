@@ -1,7 +1,14 @@
 {
+  "dependencies": {
+    "bufferutil": "^4.0.6",
+    "discord.js": "^13.8.0",
+    "erlpack": "github:discord/erlpack",
+    "utf-8-validate": "^5.0.9",
+    "zlib-sync": "^0.1.7"
+  },
   "name": "ticketthreadbot",
   "version": "1.0.0",
-  "description": "A concept Ticket Support System for D1fterX's Discord Server",
+  "description": "A concept ticket system bot for Dr1fterXs Discord Server",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,23 +19,13 @@
   },
   "keywords": [
     "discord",
-    "discord-bot",
-    "discord-bot-template",
     "discordjs",
-    "nodejs"
+    "discord-bot"
   ],
   "author": "TwilightZebby",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/TwilightZebby/TicketThreadBot/issues"
   },
-  "homepage": "https://github.com/TwilightZebby/TicketThreadBot#readme",
-  "dependencies": {
-    "bufferutil": "^4.0.3",
-    "discord.js": "^13.1.0",
-    "erlpack": "github:discord/erlpack",
-    "mee6-levels-api": "^1.3.0",
-    "utf-8-validate": "^5.0.5",
-    "zlib-sync": "^0.1.7"
-  }
+  "homepage": "https://github.com/TwilightZebby/TicketThreadBot#readme"
 }

@@ -1,7 +1,9 @@
 /node_modules
 config.js
 /.vscode
-/hiddenJsonFiles
-/commands/test.js
-/slashCommands/test.js
-/contextCommands/test.js
+
+/jsonFiles
+
+/textCommands/shutdown.js
+
+/buttons/shutdown.js
