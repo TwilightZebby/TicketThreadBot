@@ -4,7 +4,7 @@ const Discord = require('discord.js');
 const { client } = require('../constants.js');
 const CONSTANTS = require('../constants.js');
 const { PREFIX, TwilightZebbyID } = require('../config.js');
-const TextCommandAllowLists = require('../hiddenJsonFiles/commandAllowList.json');
+const TextCommandAllowLists = require('../jsonFiles/commandAllowList.json');
 
 module.exports = {
     /**
