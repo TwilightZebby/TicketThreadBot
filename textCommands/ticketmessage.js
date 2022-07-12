@@ -6,13 +6,21 @@ const CONSTANTS = require('../constants.js');
 
 
 // Make Select menu
-const ticketCreationSelectMenu = new Discord.MessageActionRow().addComponents(
+/* const ticketCreationSelectMenu = new Discord.MessageActionRow().addComponents(
     new Discord.MessageSelectMenu().setCustomId(`create-ticket`).setMaxValues(1).setMinValues(1).setPlaceholder(`Choose a Ticket type`).setOptions(
         { label: `General`, value: `general`, description: `General Support Ticket, if none of the other options fit`, emoji: `<:LukeWat:662716296626044958>` },
         { label: `User Report`, value: `report`, description: `Report another Member of the Server`, emoji: `⚠️` },
         { label: `Application`, value: `application`, description: `Apply for a Role which has Applications open`, emoji: `📝` },
         { label: `Claim Monthly Role`, value: `monthly-role`, description: `Claim the Monthly Role, if you won it this month!`, emoji: `🏆` }
     )
+); */
+
+// Button Menu
+const ticketCreationButtonsRow1 = new Discord.MessageActionRow().addComponents(
+    new Discord.MessageButton().setCustomId(`newticket_general`).setEmoji(`<:LukeWat:662716296626044958>`).setLabel("General").setStyle('PRIMARY'),
+    new Discord.MessageButton().setCustomId(`newticket_report`).setEmoji(`⚠️`).setLabel("Report").setStyle('PRIMARY'),
+    new Discord.MessageButton().setCustomId(`newticket_application`).setEmoji(`📝`).setLabel("Application").setStyle('PRIMARY'),
+    new Discord.MessageButton().setCustomId(`newticket_monthly-role`).setEmoji(`🏆`).setLabel("Monthly Role").setStyle('PRIMARY')
 );
 
 
@@ -20,7 +28,7 @@ module.exports = {
     // Command Name
     name: 'ticketmessage',
     // Description of command
-    description: `Dumps the message explaining how to use the Ticket System, along with the Select Menu for starting the Ticket Creation Process`,
+    description: `Dumps the message explaining how to use the Ticket System, along with the options for starting the Ticket Creation Process`,
     // Category of Command
     category: 'ticket',
 
@@ -71,13 +79,13 @@ module.exports = {
     async execute(message, arguments)
     {
         // Send message
-        return await message.channel.send({ components: [ticketCreationSelectMenu], allowedMentions: { parse: [] },
+        return await message.channel.send({ components: [ticketCreationButtonsRow1], allowedMentions: { parse: [] },
             content: `__**St1g Gaming Ticket System**__
 *You have reached the Help Center for the St1g Gaming Server, please leave your message after the beep...*
             
 This is where you can create Tickets to be able to gain help from the Server's Moderation Team; whether it'd be reporting another Server Member, applying for a Role, asking for help in how something works, or otherwise!
             
-To start the process of creating a Ticket, please select the type of Ticket from the Select Menu attached to the bottom of this message ↙`
+To start the process of creating a Ticket, please select the type of Ticket using the Buttons attached to the bottom of this message ↙`
         });
     }
 };
