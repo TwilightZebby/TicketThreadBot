@@ -5,6 +5,7 @@ const { client } = require('../constants.js');
 const CONSTANTS = require('../constants.js');
 
 
+// To make the application names more UX friendly
 const ApplicationKeyToName = {
     "helper": "Helper Role",
     "twitch": "Twitch Streamer Role",
@@ -13,6 +14,12 @@ const ApplicationKeyToName = {
     "musician": "Musician Role",
     "minecraft": "Minecraft Server Whitelist"
 };
+
+// Modals to be shown for Applications
+const ModalMinecraftServerWhitelist = new Discord.Modal().setCustomId('application-minecraft').setTitle("Minecraft Server Application").addComponents(
+    new Discord.MessageActionRow().addComponents( new Discord.TextInputComponent().setCustomId(`minecraft-username`).setLabel("What is your Minecraft Username?").setMaxLength(16).setMinLength(1).setRequired(true).setStyle('SHORT') ),
+    new Discord.MessageActionRow().addComponents( new Discord.TextInputComponent().setCustomId(`whitelist-reason`).setLabel("Why would you like to be Whitelisted?").setMaxLength(3000).setMinLength(1).setRequired(true).setStyle('PARAGRAPH') )
+);
 
 
 module.exports = {
@@ -48,7 +55,14 @@ module.exports = {
         else
         {
             // Applications are open!
-            return await selectInteraction.update({ components: [], content: `Test Successful!` });
+            switch(selectedApplication)
+            {
+                case "minecraft":
+                    return await selectInteraction.showModal(ModalMinecraftServerWhitelist);
+
+                default:
+                    return await selectInteraction.update({ components: [], content: `Test Successful!` });
+            }
         }
     }
 };
