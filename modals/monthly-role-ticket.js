@@ -19,6 +19,8 @@ module.exports = {
      */
     async execute(modalInteraction)
     {
+        await modalInteraction.deferReply({ ephemeral: true });
+
         const now = new Date();
         const requestedRoleName = modalInteraction.fields.getTextInputValue('role-name');
         const requestedRoleColour = modalInteraction.fields.getTextInputValue('role-colour');
@@ -51,7 +53,7 @@ This Server's Staff Team is aware of the creation of this Ticket, and will be re
             // Add Thread Member(s)
             await ticketThread.members.add(modalInteraction.user.id, `Adding Ticket Creator to their Ticket's Thread`);
 
-            await modalInteraction.reply({
+            await modalInteraction.editReply({
                 ephemeral: true, content: `Your Monthly Role Ticket has been created! You can find it here ( <#${ticketThread.id}> ) or by using the Threads button at the top of the Channel!`
             });
         }

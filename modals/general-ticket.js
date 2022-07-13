@@ -19,6 +19,7 @@ module.exports = {
      */
     async execute(modalInteraction)
     {
+        await modalInteraction.deferReply({ ephemeral: true });
         const now = new Date();
 
         // Just so VSC is nice to me
@@ -55,7 +56,7 @@ __Initial Message from Ticket Creator displayed below:__`)
             // Add Thread Member(s)
             await ticketThread.members.add(modalInteraction.user.id, `Adding Ticket Creator to their Ticket's Thread`);
 
-            await modalInteraction.reply({
+            await modalInteraction.editReply({
                 ephemeral: true, content: `Your General Ticket has been created! You can find it here ( <#${ticketThread.id}> ) or by using the Threads button at the top of the Channel!`
             });
         }
