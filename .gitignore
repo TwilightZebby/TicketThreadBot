@@ -2,8 +2,4 @@
 config.js
 /.vscode
 
-/jsonFiles
-
-/textCommands/shutdown.js
-
-/buttons/shutdown.js
+# /JsonFiles
