@@ -1,6 +1,7 @@
 const { ButtonInteraction } = require("discord.js");
 const TicketGeneral = require('../../BotModules/Tickets/TicketGeneral.js');
 const TicketMonthlyRole = require('../../BotModules/Tickets/TicketMonthlyRole.js');
+const TicketApplication = require('../../BotModules/Tickets/TicketApplication.js');
 
 module.exports = {
     // Button's Name
@@ -33,6 +34,7 @@ module.exports = {
                 break;
 
             case "application":
+                await TicketApplication.promptApplicationType(buttonInteraction);
                 break;
 
             case "monthly-role":
