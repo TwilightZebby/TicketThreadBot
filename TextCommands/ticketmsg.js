@@ -1,7 +1,5 @@
 const { Message, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const { DiscordClient, Collections } = require("../constants.js");
-const LocalizedErrors = require("../JsonFiles/errorMessages.json");
-const LocalizedStrings = require("../JsonFiles/stringMessages.json");
 
 // Button Menus
 const StartTicketButtonsRow1 = new ActionRowBuilder().addComponents([

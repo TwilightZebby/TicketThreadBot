@@ -1,5 +1,4 @@
 const { ButtonInteraction, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, ModalSubmitInteraction, ModalMessageModalSubmitInteraction, TextChannel, ChannelType, ThreadAutoArchiveDuration, EmbedBuilder, Colors } = require("discord.js");
-const LocalizedErrors = require("../../JsonFiles/errorMessages.json");
 const { StaffRoleID } = require('../../config.js');
 
 /** Model for User to describe their Ticket */

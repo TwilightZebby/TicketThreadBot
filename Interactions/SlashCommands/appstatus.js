@@ -1,8 +1,6 @@
 const { ChatInputCommandInteraction, ChatInputApplicationCommandData, AutocompleteInteraction, ApplicationCommandType, PermissionFlagsBits, ApplicationCommandOptionType, ApplicationCommandOptionChoiceData } = require("discord.js");
 const fs = require("fs");
 const { DiscordClient, Collections } = require("../../constants.js");
-const LocalizedErrors = require("../../JsonFiles/errorMessages.json");
-const LocalizedStrings = require("../../JsonFiles/stringMessages.json");
 const ApplicationStatuses = require("../../JsonFiles/applicationStatus.json");
 
 // For the Autocomplete
