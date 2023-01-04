@@ -75,6 +75,10 @@ We'll announce in our Announcement Channels when the ${ApplicationKeyToName[Sele
             // Applications are open
             switch(SelectedApplication)
             {
+                // Musician Role
+                case "musician":
+                    break;
+
                 default:
                     await selectInteraction.update({ components: [], content: `Sorry, but something went wrong while trying to process that Select Menu Interaction...` });
                     break;

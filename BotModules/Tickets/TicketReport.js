@@ -6,7 +6,7 @@ const TicketModel = new ModalBuilder().setCustomId(`report-ticket`).setTitle(`Re
     new ActionRowBuilder().addComponents([ new TextInputBuilder().setCustomId(`report-reason`).setLabel(`Why do you want to report this Member?`).setMaxLength(4000).setMinLength(25).setRequired(true).setStyle(TextInputStyle.Paragraph) ])
 ]);
 
-const ReportUserSelectMenu = new ActionRowBuilder().addComponents([ new UserSelectMenuBuilder().setCustomId(`report-user-select`).setMinValues(1).setMaxValues(1).setPlaceholder("Select who to report") ]);
+const ReportUserSelectMenu = new ActionRowBuilder().addComponents([ new UserSelectMenuBuilder().setCustomId(`report-user-select`).setMinValues(1).setMaxValues(1).setPlaceholder("Search for a Member") ]);
 
 module.exports = {
     /**
