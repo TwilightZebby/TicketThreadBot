@@ -1,11 +1,99 @@
-const { ButtonInteraction, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, ModalSubmitInteraction, ModalMessageModalSubmitInteraction, TextChannel, ChannelType, ThreadAutoArchiveDuration, EmbedBuilder, Colors, StringSelectMenuBuilder, StringSelectMenuInteraction } = require("discord.js");
+const { ButtonInteraction, ActionRowBuilder, TextChannel, ChannelType, ThreadAutoArchiveDuration, EmbedBuilder, Colors, StringSelectMenuBuilder, StringSelectMenuInteraction } = require("discord.js");
 const { StaffRoleID } = require('../../config.js');
 
-/** Model for User to describe their Ticket */
-const TicketModel = new ModalBuilder().setCustomId(`monthly-role-ticket`).setTitle(`Claim Monthly Role`).addComponents([
-    new ActionRowBuilder().addComponents([ new TextInputBuilder().setCustomId(`role-name`).setLabel(`What would you like to name your Role?`).setMaxLength(50).setMinLength(1).setRequired(true).setStyle(TextInputStyle.Short) ]),
-    new ActionRowBuilder().addComponents([ new TextInputBuilder().setCustomId(`role-color`).setLabel(`What Role colour would you like?`).setMaxLength(50).setMinLength(1).setRequired(true).setStyle(TextInputStyle.Short) ])
-]);
+/** Embed for Musician Questions */
+const MusicianAppEmbed = new EmbedBuilder().setColor(Colors.DarkAqua)
+.setTitle("Musician Role Application")
+.addFields(
+    {
+        name: `Requirements`,
+        value: `• Active in the Server
+• Frequently posting music in our Creations Channel`
+    },
+    {
+        name: `Questions`,
+        value: `**1.** Why would you like the Musician Role?
+**2.** Please share some of your favourite pieces of music __you__ have made`
+    }
+);
+
+
+/** Embed for Artist Questions */
+const ArtistAppEmbed = new EmbedBuilder().setColor(Colors.DarkAqua)
+.setTitle("Artist Role Application")
+.addFields(
+    {
+        name: `Requirements`,
+        value: `• Active in the Server
+• Frequently posting art in our Creations Channel`
+    },
+    {
+        name: `Questions`,
+        value: `**1.** Why would you like the Artist Role?
+**2.** Please share some of your favourite pieces of art __you__ have made`
+    }
+);
+
+
+/** Embed for Helper Questions */
+const HelperAppEmbed = new EmbedBuilder().setColor(Colors.DarkAqua)
+.setTitle("Helper Application")
+.addFields(
+    {
+        name: `Requirements`,
+        value: `• Have at least Level 10 in our XP System
+• Have been on the Server for at least 6 months
+• At least 16 years or older in real life`
+    },
+    {
+        name: `Questions - The Basics`,
+        value: `**1.** How old are you?
+**2.** What Timezone are you mainly in?
+**3.** Tell us a little about yourself`
+    },
+    {
+        name: `Questions - The Moderation`,
+        value: `**4.** What is your current moderation experience?
+**5.** Why do you want to be a part of our Staff Team?
+**6.** How would you benefit us, the Staff Team?`
+    },
+    {
+        name: `Questions - The Scenarios`,
+        value: `**7.** A Member is being disrespectful towards other Members, and is not listening to other Members. What do you do?
+**8.** A Staff Team Member is abusing their powers. What do you do?
+**9.** A Member asks you a question, but you don't know the answer or don't know how to respond. What do you do?`
+    }
+);
+
+
+/** Embed for Twitch Questions */
+const TwitchAppEmbed = new EmbedBuilder().setColor(Colors.DarkAqua)
+.setTitle("Twitch Role Application")
+.addFields(
+    {
+        name: `Requirements`,
+        value: `• Have at least x followers on Twitch`
+    },
+    {
+        name: `Questions`,
+        value: `**1.** What is your Twitch Channel?`
+    }
+);
+
+
+/** Embed for YouTuber Questions */
+const YouTuberAppEmbed = new EmbedBuilder().setColor(Colors.DarkAqua)
+.setTitle("YouTuber Role Application")
+.addFields(
+    {
+        name: `Requirements`,
+        value: `• Have at least x susbcribers on YouTube`
+    },
+    {
+        name: `Questions`,
+        value: `**1.** What is your YouTube Channel?`
+    }
+);
 
 
 // To make the application names more UX friendly
@@ -24,7 +112,7 @@ module.exports = {
      */
     async promptApplicationType(buttonInteraction)
     {
-        const ApplicationStatus = require('../../JsonFiles/applicationStatus.json');
+        let ApplicationStatus = require('../../JsonFiles/applicationStatus.json');
 
         /** Select Menu for User to choose which Application they want to open */
         const ApplicationSelect = new ActionRowBuilder().addComponents([
@@ -42,6 +130,9 @@ module.exports = {
             content: `Please select which Application you would like to open, using the Select Menu below.
 Open Applications are shown with ✅ - while closed Applications are shown with ❌`
         });
+
+        // Clear cache
+        delete ApplicationStatus, ApplicationSelect;
         return;
     },
 
@@ -54,7 +145,7 @@ Open Applications are shown with ✅ - while closed Applications are shown with 
      */
     async promptUser(selectInteraction)
     {
-        const ApplicationStatus = require('../../JsonFiles/applicationStatus.json');
+        let ApplicationStatus = require('../../JsonFiles/applicationStatus.json');
 
         // Check selected Application *is* open
         const SelectedApplication = selectInteraction.values.shift();
@@ -68,22 +159,18 @@ Open Applications are shown with ✅ - while closed Applications are shown with 
                 content: `Sorry, but the ${ApplicationKeyToName[SelectedApplication]} Applications are currently closed!
 We'll announce in our Announcement Channels when the ${ApplicationKeyToName[SelectedApplication]} Applications are open again, so be sure to keep on eye on them.`
             });
+
+            // Clear cache
+            delete ApplicationStatus;
             return;
         }
         else
         {
             // Applications are open
-            switch(SelectedApplication)
-            {
-                // Musician Role
-                case "musician":
-                    break;
-
-                default:
-                    await selectInteraction.update({ components: [], content: `Sorry, but something went wrong while trying to process that Select Menu Interaction...` });
-                    break;
-            }
-
+            await this.create(selectInteraction, SelectedApplication);
+            
+            // Clear cache
+            delete ApplicationStatus, CurrentApplicationStatus;
             return;
         }
     },
@@ -93,43 +180,47 @@ We'll announce in our Announcement Channels when the ${ApplicationKeyToName[Sele
 
     /**
      * Creates a Private Thread to be used as the Ticket
-     * @param {ModalSubmitInteraction|ModalMessageModalSubmitInteraction} modalInteraction 
+     * @param {StringSelectMenuInteraction} selectInteraction 
+     * @param {String} SelectedApplication
      */
-    async create(modalInteraction)
+    async create(selectInteraction, SelectedApplication)
     {
         // Defer because creating a whole Thread will not be done in the span of 3 seconds
-        await modalInteraction.deferReply({ ephemeral: true });
+        await selectInteraction.deferUpdate();
         const now = new Date();
-        const InputRoleName = modalInteraction.fields.getTextInputValue('role-name');
-        const InputRoleColor = modalInteraction.fields.getTextInputValue('role-color');
         /** @type {TextChannel} */
-        const SourceChannel = modalInteraction.channel;
+        const SourceChannel = selectInteraction.channel;
 
         // Create Thread for Ticket
         await SourceChannel.threads.create({
             type: ChannelType.PrivateThread,
             autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
-            name: `${modalInteraction.user.username} - Monthly Role Ticket - ${now.getDate()}.${now.getMonth() + 1}`,
-            reason: `New Ticket created by ${modalInteraction.user.username}#${modalInteraction.user.discriminator} (ID: ${modalInteraction.user.id})`
+            name: `${selectInteraction.user.username} - ${ApplicationKeyToName[SelectedApplication]} App - ${now.getDate()}.${now.getMonth() + 1}`,
+            reason: `New Ticket created by ${selectInteraction.user.username}#${selectInteraction.user.discriminator} (ID: ${selectInteraction.user.id})`
         })
         .then(async (TicketThread) => {
             
             // Initial Message, from Bot, along with requested Role details
-            const InitialBotMessage = new EmbedBuilder().setTitle(`New Ticket Created`)
+            const InitialBotMessage = new EmbedBuilder().setTitle(`New Application Created`)
             .addFields(
-                { name: `Ticket Creator:`, value: `${modalInteraction.user.tag} (<@${modalInteraction.user.id}>)` },
-                { name: `Ticket Type:`, value: `Monthly Role` },
-                { name: `Requested Name:`, value: InputRoleName, inline: true },
-                { name: `Requested Colour:`, value: InputRoleColor, inline: true },
-                { name: `\u200B`, value: `The Staff Team are notified of the creation of this Ticket, and will be responding as soon as they can.` }
+                { name: `Application Creator:`, value: `${selectInteraction.user.tag} (<@${selectInteraction.user.id}>)` },
+                { name: `Application Type:`, value: `${ApplicationKeyToName[SelectedApplication]}` },
+                { name: `\u200B`, value: `The Staff Team are aware of the creation of this Application, and will be checking it once you have filled out the questions required.` }
             )
             .setColor(Colors.Aqua);
 
+            // Fetch Requirements & Questions based on Application Type
+            const ApplicationEmbed = SelectedApplication === "helper" ? HelperAppEmbed
+                : SelectedApplication === "twitch" ? TwitchAppEmbed
+                : SelectedApplication === "youtube" ? YouTuberAppEmbed
+                : SelectedApplication === "artist" ? ArtistAppEmbed
+                : MusicianAppEmbed;
+
             // Send initial messages
-            await TicketThread.send({ embeds: [InitialBotMessage] })
+            await TicketThread.send({ embeds: [InitialBotMessage, ApplicationEmbed] })
             .then(async (message) => {
                 // Add Ticket Creator to Thread
-                await TicketThread.members.add(modalInteraction.user.id, `Adding Ticket Creator to their Ticket's Thread`);
+                await TicketThread.members.add(selectInteraction.user.id, `Adding App. Creator to their App's Thread`);
 
                 // Add Staff Team to Thread via a ping in edited message (no notif method)
                 await message.edit({ content: `<@&${StaffRoleID}>` });
@@ -139,12 +230,12 @@ We'll announce in our Announcement Channels when the ${ApplicationKeyToName[Sele
             });
 
             // ACK back to Interaction
-            await modalInteraction.editReply({ content: `Your Monthly Role Ticket has been created! You can find it here -> <#${TicketThread.id}> (or by using the Threads Button at the top of this Channel!)` });
+            await selectInteraction.editReply({ components: [], content: `Your ${ApplicationKeyToName[SelectedApplication]} Application has been created! You can fill it out here -> <#${TicketThread.id}> (or by using the Threads Button at the top of this Channel!)` });
 
         })
         .catch(async (err) => {
             //console.error(err);
-            await modalInteraction.editReply({ content: `Sorry, an error occurred while trying to make your Monthly Role Ticket.` });
+            await selectInteraction.editReply({ components: [], content: `Sorry, an error occurred while trying to make your ${ApplicationKeyToName[SelectedApplication]} Application.` });
         });
 
         return;
