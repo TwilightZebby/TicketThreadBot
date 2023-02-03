@@ -14,7 +14,7 @@ module.exports = {
 
     // Cooldown, in seconds
     //     Defaults to 3 seconds if missing
-    Cooldown: 60,
+    Cooldown: 6,
 
 
 

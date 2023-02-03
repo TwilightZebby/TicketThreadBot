@@ -1,7 +1,6 @@
 const { ChatInputCommandInteraction, ChatInputApplicationCommandData, AutocompleteInteraction, ApplicationCommandType, PermissionFlagsBits, ApplicationCommandOptionType, ApplicationCommandOptionChoiceData } = require("discord.js");
 const fs = require("fs");
 const { DiscordClient, Collections } = require("../../constants.js");
-const ApplicationStatuses = require("../../JsonFiles/applicationStatus.json");
 
 // For the Autocomplete
 /** @type {Array<ApplicationCommandOptionChoiceData>} */
@@ -90,6 +89,7 @@ module.exports = {
      */
     async execute(slashCommand)
     {
+        const ApplicationStatuses = require("../../JsonFiles/applicationStatus.json");
         // Grab inputs
         const ApplicationInput = slashCommand.options.getString("application");
         const StatusInput = slashCommand.options.getBoolean("status");
@@ -98,9 +98,9 @@ module.exports = {
         await slashCommand.deferReply({ ephemeral: true });
 
         // Update Application Status
-        let updateApplicationStatus = ApplicationStatuses[ApplicationInput] = StatusInput;
+        ApplicationStatuses[ApplicationInput] = StatusInput;
 
-        fs.writeFile('./JsonFiles/applicationStatus.json', JSON.stringify(updateApplicationStatus, null, 4), async (err) => {
+        fs.writeFile('./JsonFiles/applicationStatus.json', JSON.stringify(ApplicationStatuses, null, 4), async (err) => {
             if ( err ) { await slashCommand.editReply({ content: `An error occurred while trying to update the Application Status.` }); return; }
         });
 
