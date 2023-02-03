@@ -2,19 +2,20 @@ const { DiscordClient } = require("./constants.js");
 const Config = require("./config.js");
 
 // Bring in Slash Commands for (un)registering
-const RegisterCommand = require('./Interactions/SlashCommands/register.js');
-const UnregisterCommand = require('./Interactions/SlashCommands/unregister.js');
+const AppstatusCommand = require('./Interactions/SlashCommands/appstatus.js');
 
 // Login Bot
 DiscordClient.login(Config.TOKEN);
 
 // Wait for Ready
 DiscordClient.once('ready', async () => {
-    // Register Commands used for...(un)registering commands
-    await DiscordClient.application.commands.create(RegisterCommand.registerData(), Config.ErrorLogGuildID);
-    await DiscordClient.application.commands.create(UnregisterCommand.registerData(), Config.ErrorLogGuildID);
+    // Use to register a single command
+    //await DiscordClient.application.commands.create(AppstatusCommand.registerData(), Config.ErrorLogGuildID); // Include Guild ID to register to specific Guild
+    
+    // Use to UNregister all Commands
+    await DiscordClient.application.commands.set([], Config.ErrorLogGuildID); // Include Guild ID to UNregister from a specific Guild
 
-    console.log("Deployed Register & Unregister Commands!");
+    console.log("Deployed Commands!");
     process.exit();
 });
 
