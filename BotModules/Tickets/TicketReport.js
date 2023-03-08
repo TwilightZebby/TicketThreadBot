@@ -1,5 +1,5 @@
 const { ButtonInteraction, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, ModalSubmitInteraction, ModalMessageModalSubmitInteraction, TextChannel, ChannelType, ThreadAutoArchiveDuration, EmbedBuilder, Colors, UserSelectMenuInteraction, UserSelectMenuBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, StringSelectMenuInteraction } = require("discord.js");
-const { StaffRoleID } = require('../../config.js');
+const { StaffRoleID, ReportLogChannelID } = require('../../config.js');
 
 /** Model for User to describe their Ticket */
 const TicketModel = new ModalBuilder().setCustomId(`report-ticket`).setTitle(`Report a Member`).addComponents([
@@ -110,6 +110,7 @@ module.exports = {
         await SourceChannel.threads.create({
             type: ChannelType.PrivateThread,
             autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
+            invitable: false,
             name: `${modalInteraction.user.username} - Member Report - ${now.getDate()}.${now.getMonth() + 1}`,
             reason: `New Member Report opened by ${modalInteraction.user.username}#${modalInteraction.user.discriminator} (ID: ${modalInteraction.user.id})`
         })
@@ -143,6 +144,21 @@ module.exports = {
 
             // ACK back to Interaction
             await modalInteraction.editReply({ components: [], content: `Your Member Report has been created. You can find it here -> <#${TicketThread.id}> (or by using the Threads Button at the top of this Channel).` });
+
+
+            // Log to Staff Logging Channel for Reports
+            /** @type {TextChannel} */
+            const ReportLogChannel = await modalInteraction.guild.channels.fetch(ReportLogChannelID);
+            const ReportLogEmbed = new EmbedBuilder().setColor(Colors.Red)
+            .setTitle(`New Member Report Opened`)
+            .addFields(
+                { name: `Report Creator`, value: `${modalInteraction.user.tag} (<@${modalInteraction.user.id}> - User ID: \`${modalInteraction.user.id}\`)` },
+                { name: `Member Being Reported:`, value: `${SelectedMember.user.tag} (<@${SelectedMember.id}> - User ID: \`${SelectedMember.id}\`)` },
+                { name: `Report Type(s):`, value: `${SelectedReportTypes.split("-").join(", ")}` },
+                { name: `Report Ticket:`, value: `Thread Mention: <#${TicketThread.id}>\nThread Link: ${TicketThread.url}` }
+            );
+
+            await ReportLogChannel.send({ embeds: [ReportLogEmbed], allowedMentions: { parse: [] } });
 
         })
         .catch(async (err) => {
