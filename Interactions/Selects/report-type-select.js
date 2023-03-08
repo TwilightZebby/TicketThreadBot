@@ -1,13 +1,13 @@
-const { UserSelectMenuInteraction } = require("discord.js");
+const { StringSelectMenuInteraction } = require("discord.js");
 const TicketReport = require('../../BotModules/Tickets/TicketReport.js');
 
 module.exports = {
     // Select's Name
     //     Used as its custom ID (or at least the start of it)
-    Name: "report-user-select",
+    Name: "report-type-select",
 
     // Select's Description
-    Description: `Select used for the User to choose which Server Member to report`,
+    Description: `Selects the type, or types, of Report to open`,
 
     // Cooldown, in seconds
     //     Defaults to 3 seconds if missing
@@ -17,11 +17,11 @@ module.exports = {
 
     /**
      * Executes the Select
-     * @param {UserSelectMenuInteraction} selectInteraction 
+     * @param {StringSelectMenuInteraction} selectInteraction 
      */
     async execute(selectInteraction)
     {
-        await TicketReport.promptReportType(selectInteraction);
+        await TicketReport.promptUser(selectInteraction);
         return;
     }
 }

@@ -1,4 +1,4 @@
-const { ButtonInteraction, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, ModalSubmitInteraction, ModalMessageModalSubmitInteraction, TextChannel, ChannelType, ThreadAutoArchiveDuration, EmbedBuilder, Colors, UserSelectMenuInteraction, UserSelectMenuBuilder } = require("discord.js");
+const { ButtonInteraction, ModalBuilder, ActionRowBuilder, TextInputBuilder, TextInputStyle, ModalSubmitInteraction, ModalMessageModalSubmitInteraction, TextChannel, ChannelType, ThreadAutoArchiveDuration, EmbedBuilder, Colors, UserSelectMenuInteraction, UserSelectMenuBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, StringSelectMenuInteraction } = require("discord.js");
 const { StaffRoleID } = require('../../config.js');
 
 /** Model for User to describe their Ticket */
@@ -11,33 +11,64 @@ const ReportUserSelectMenu = new ActionRowBuilder().addComponents([ new UserSele
 module.exports = {
     /**
      * Shows a Modal for the User to input why they want to open the Ticket
-     * @param {UserSelectMenuInteraction} selectInteraction 
+     * @param {StringSelectMenuInteraction} selectInteraction 
      */
     async promptUser(selectInteraction)
     {
+        // Fetch User & Report Type
+        const ReportedUserId = selectInteraction.customId.split("_").pop();
+        const SelectedTypes = selectInteraction.values;
+        let formattedTypes = SelectedTypes.join("-");
+
+        // Attach selected User ID & Report Type into custom ID of Modal for ease in transfering that data between methods
+        let newTicketModal = TicketModel.setCustomId(`report-ticket_${formattedTypes}_${ReportedUserId}`);
+
+        await selectInteraction.showModal(newTicketModal);
+        return;
+    },
+
+
+
+
+    /**
+     * Shows a String Select for the User to select what type(s) of Report this is
+     * @param {UserSelectMenuInteraction} selectInteraction 
+     */
+    async promptReportType(selectInteraction)
+    {
+        // Grab User selected
+        const UserSelected = selectInteraction.users.first();
+
         // Ensure User didn't select themselves
-        const SelectedUser = selectInteraction.users.first();
-        if ( selectInteraction.user.id === SelectedUser.id )
+        if ( selectInteraction.user.id === UserSelected.id )
         {
-            await selectInteraction.update({ content: `Please use the Select Menu attached to this Message to choose which Server Member you want to report to our Moderation Staff Team:
+            await selectInteraction.update({ components: [ReportUserSelectMenu], content: `Please use the Select Menu attached to this Message to choose which Server Member you want to report to our Moderation Staff Team:
 
 ⚠ *You cannot report yourself! Please choose another Member to report.*` });
             return;
         }
 
         // Also make sure selected User isn't a Bot
-        if ( SelectedUser.bot )
+        if ( UserSelected.bot )
         {
-            await selectInteraction.update({ content: `Please use the Select Menu attached to this Message to choose which Server Member you want to report to our Moderation Staff Team:
+            await selectInteraction.update({ components: [ReportUserSelectMenu], content: `Please use the Select Menu attached to this Message to choose which Server Member you want to report to our Moderation Staff Team:
 
-⚠ *You cannot report a Bot! Please choose another Member to report.*` });
+⚠ *You cannot report a Bot Account! Please choose another Member to report.*` });
             return;
         }
 
-        // Attach selected User ID into custom ID of Modal for ease in transfering that data between methods
-        let newTicketModal = TicketModel.setCustomId(`report-ticket_${SelectedUser.id}`);
 
-        await selectInteraction.showModal(newTicketModal);
+        // Prompt for Report Type
+        let typeSelect = new ActionRowBuilder().addComponents([
+            new StringSelectMenuBuilder().setCustomId(`report-type-select_${UserSelected.id}`).setMinValues(1).setMaxValues(4).setPlaceholder("Select Report Type(s)").addOptions([
+                new StringSelectMenuOptionBuilder().setLabel(`Harrassment`).setValue(`harrassment`),
+                new StringSelectMenuOptionBuilder().setLabel(`Advertising`).setValue(`advertising`),
+                new StringSelectMenuOptionBuilder().setLabel(`Spamming`).setValue(`spamming`),
+                new StringSelectMenuOptionBuilder().setLabel(`Other`).setValue(`other`)
+            ])
+        ]);
+
+        await selectInteraction.update({ components: [typeSelect], content: `*Selected Member to Report:* <@${UserSelected.id}> ( ${UserSelected.tag} )\n\nPlease use the Select Menu attached to choose which type(s) of Report you want to open.\nYou can pick either one or multiple types that are relevant to what you want to report.` });
         return;
     },
 
@@ -65,11 +96,15 @@ module.exports = {
     {
         // Defer because creating a whole Thread will not be done in the span of 3 seconds
         await modalInteraction.deferUpdate({ ephemeral: true });
+
+        const SplitCustomId = modalInteraction.customId.split("_");
+
         const now = new Date();
         /** @type {TextChannel} */
         const SourceChannel = modalInteraction.channel;
-        const SelectedUserId = modalInteraction.customId.split("_").pop();
+        const SelectedUserId = SplitCustomId.pop();
         const SelectedMember = await modalInteraction.guild.members.fetch(SelectedUserId);
+        const SelectedReportTypes = SplitCustomId.pop();
 
         // Create Thread for Ticket
         await SourceChannel.threads.create({
@@ -84,8 +119,9 @@ module.exports = {
             const InitialBotMessage = new EmbedBuilder().setTitle(`New Report Opened`)
             .addFields(
                 { name: `Report Creator:`, value: `${modalInteraction.user.tag} (<@${modalInteraction.user.id}>)` },
-                { name: `Ticket Type:`, value: `Report` },
                 { name: `Member Being Reported:`, value: `${SelectedMember.user.tag} (<@${SelectedMember.id}> - User ID: \`${SelectedMember.id}\`)` },
+                { name: `Ticket Type:`, value: `Report` },
+                { name: `Report Type(s):`, value: `${SelectedReportTypes.split("-").join(", ")}` },
                 { name: `\u200B`, value: `The Staff Team are notified of the creation of this Report, and will be investigating as soon as they can.\nWhile you're waiting for a response, if you have anything else to add, please do so below your initial reason.` }
             )
             .setColor(Colors.Red);
