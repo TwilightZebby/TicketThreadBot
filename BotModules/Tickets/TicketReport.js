@@ -128,8 +128,9 @@ module.exports = {
             .setColor(Colors.Red);
 
             // Initial Message, from User
+            const InputtedReason = modalInteraction.fields.getTextInputValue('report-reason');
             const InitialUserMessage = new EmbedBuilder().setTitle(`Initial Report reason from Report Creator:`)
-            .setDescription(modalInteraction.fields.getTextInputValue('report-reason'))
+            .setDescription(InputtedReason)
             .setColor(Colors.DarkRed);
 
             // Send initial messages (pinging Server Staff into Thread due to it being a Report)
@@ -155,7 +156,8 @@ module.exports = {
                 { name: `Report Creator`, value: `${modalInteraction.user.tag} (<@${modalInteraction.user.id}> - User ID: \`${modalInteraction.user.id}\`)` },
                 { name: `Member Being Reported:`, value: `${SelectedMember.user.tag} (<@${SelectedMember.id}> - User ID: \`${SelectedMember.id}\`)` },
                 { name: `Report Type(s):`, value: `${SelectedReportTypes.split("-").join(", ")}` },
-                { name: `Report Ticket:`, value: `Thread Mention: <#${TicketThread.id}>\nThread Link: ${TicketThread.url}` }
+                { name: `Report Ticket:`, value: `Thread Mention: <#${TicketThread.id}>\nThread Link: ${TicketThread.url}` },
+                { name: `Initial Reason:`, value: InputtedReason.length > 1900 ? `${InputtedReason.slice(0, 1900)}...` : `${InputtedReason}` }
             );
 
             await ReportLogChannel.send({ embeds: [ReportLogEmbed], allowedMentions: { parse: [] } });
