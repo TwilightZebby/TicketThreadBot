@@ -13,7 +13,7 @@ DiscordClient.once('ready', async () => {
     //await DiscordClient.application.commands.create(AppstatusCommand.registerData(), Config.ErrorLogGuildID); // Include Guild ID to register to specific Guild
     
     // Use to UNregister all Commands
-    await DiscordClient.application.commands.set([], Config.ErrorLogGuildID); // Include Guild ID to UNregister from a specific Guild
+    //await DiscordClient.application.commands.set([], Config.ErrorLogGuildID); // Include Guild ID to UNregister from a specific Guild
 
     console.log("Deployed Commands!");
     process.exit();
