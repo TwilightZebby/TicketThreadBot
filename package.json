@@ -1,14 +1,14 @@
 {
   "dependencies": {
-    "bufferutil": "^4.0.6",
-    "discord.js": "^13.8.0",
+    "bufferutil": "^4.0.7",
+    "discord.js": "^14.8.0",
     "erlpack": "github:discord/erlpack",
-    "utf-8-validate": "^5.0.9",
+    "utf-8-validate": "^5.0.10",
     "zlib-sync": "^0.1.7"
   },
   "name": "ticketthreadbot",
+  "description": "Just a concept for how the ticket system could be improved on Dr1fterX's Discord :)",
   "version": "1.0.0",
-  "description": "A concept ticket system bot for Dr1fterXs Discord Server",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -20,7 +20,8 @@
   "keywords": [
     "discord",
     "discordjs",
-    "discord-bot"
+    "discord-bot",
+    "nodejs"
   ],
   "author": "TwilightZebby",
   "license": "ISC",
