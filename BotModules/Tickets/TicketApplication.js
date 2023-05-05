@@ -196,7 +196,7 @@ We'll announce in our Announcement Channels when the ${ApplicationKeyToName[Sele
             type: ChannelType.PrivateThread,
             autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
             name: `${selectInteraction.user.username} - ${ApplicationKeyToName[SelectedApplication]} App - ${now.getDate()}.${now.getMonth() + 1}`,
-            reason: `New Ticket created by ${selectInteraction.user.username}#${selectInteraction.user.discriminator} (ID: ${selectInteraction.user.id})`
+            reason: `New Ticket created by ${selectInteraction.user.tag} (ID: ${selectInteraction.user.id})`
         })
         .then(async (TicketThread) => {
             

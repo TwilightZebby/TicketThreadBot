@@ -112,7 +112,7 @@ module.exports = {
             autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
             invitable: false,
             name: `${modalInteraction.user.username} - Member Report - ${now.getDate()}.${now.getMonth() + 1}`,
-            reason: `New Member Report opened by ${modalInteraction.user.username}#${modalInteraction.user.discriminator} (ID: ${modalInteraction.user.id})`
+            reason: `New Member Report opened by ${modalInteraction.user.tag} (ID: ${modalInteraction.user.id})`
         })
         .then(async (TicketThread) => {
             

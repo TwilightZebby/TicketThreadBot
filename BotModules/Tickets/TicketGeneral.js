@@ -37,7 +37,7 @@ module.exports = {
             type: ChannelType.PrivateThread,
             autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
             name: `${modalInteraction.user.username} - General Ticket - ${now.getDate()}.${now.getMonth() + 1}`,
-            reason: `New Ticket created by ${modalInteraction.user.username}#${modalInteraction.user.discriminator} (ID: ${modalInteraction.user.id})`
+            reason: `New Ticket created by ${modalInteraction.user.tag} (ID: ${modalInteraction.user.id})`
         })
         .then(async (TicketThread) => {
             
