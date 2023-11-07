@@ -81,7 +81,7 @@ module.exports = {
      */
     async promptMemberSelect(buttonInteraction)
     {
-        await buttonInteraction.reply({ ephemeral: true, components: [ReportUserSelectMenu], content: `Please use the Select Menu attached to this Message to choose which Server Member you want to report to our Moderation Staff Team:` });
+        await buttonInteraction.reply({ ephemeral: true, components: [ReportUserSelectMenu], content: `Please use the Select Menu attached to this Message to choose which Server Member you want to report to our Moderation Staff Team:\n\n*(Note: the dropdown is also a search bar, you can type in it to quickly search for the Member in question)*` });
         return;
     },
 
