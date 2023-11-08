@@ -5,7 +5,8 @@ const { DiscordClient, Collections } = require("../constants.js");
 const StartTicketButtonsRow1 = new ActionRowBuilder().addComponents([
     new ButtonBuilder().setCustomId(`newticket_general`).setEmoji(`<:LukeWat:662716296626044958>`).setLabel(`General`).setStyle(ButtonStyle.Primary),
     new ButtonBuilder().setCustomId(`newticket_application`).setEmoji(`📝`).setLabel(`Application`).setStyle(ButtonStyle.Primary),
-    new ButtonBuilder().setCustomId(`newticket_monthly-role`).setEmoji(`🏆`).setLabel(`Monthly Role`).setStyle(ButtonStyle.Primary)
+    new ButtonBuilder().setCustomId(`newticket_monthly-role`).setEmoji(`🏆`).setLabel(`Monthly Role`).setStyle(ButtonStyle.Primary),
+    new ButtonBuilder().setCustomId(`newticket_bug-report`).setEmoji(`🐛`).setLabel(`Bug Report`).setStyle(ButtonStyle.Primary)
 ]);
 
 const StartTicketButtonsRow2 = new ActionRowBuilder().addComponents([

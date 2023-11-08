@@ -40,14 +40,14 @@ module.exports = {
             type: ChannelType.PrivateThread,
             autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
             name: `${modalInteraction.user.username} - Monthly Role Ticket - ${now.getDate()}.${now.getMonth() + 1}`,
-            reason: `New Ticket created by ${modalInteraction.user.tag} (ID: ${modalInteraction.user.id})`
+            reason: `New Ticket created by ${modalInteraction.user.username} (ID: ${modalInteraction.user.id})`
         })
         .then(async (TicketThread) => {
             
             // Initial Message, from Bot, along with requested Role details
             const InitialBotMessage = new EmbedBuilder().setTitle(`New Ticket Created`)
             .addFields(
-                { name: `Ticket Creator:`, value: `${modalInteraction.user.tag} (<@${modalInteraction.user.id}>)` },
+                { name: `Ticket Creator:`, value: `${modalInteraction.user.username} (<@${modalInteraction.user.id}>)` },
                 { name: `Ticket Type:`, value: `Monthly Role` },
                 { name: `Requested Name:`, value: InputRoleName, inline: true },
                 { name: `Requested Colour:`, value: InputRoleColor, inline: true },

@@ -196,14 +196,14 @@ We'll announce in our Announcement Channels when the ${ApplicationKeyToName[Sele
             type: ChannelType.PrivateThread,
             autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
             name: `${selectInteraction.user.username} - ${ApplicationKeyToName[SelectedApplication]} App - ${now.getDate()}.${now.getMonth() + 1}`,
-            reason: `New Ticket created by ${selectInteraction.user.tag} (ID: ${selectInteraction.user.id})`
+            reason: `New Ticket created by ${selectInteraction.user.username} (ID: ${selectInteraction.user.id})`
         })
         .then(async (TicketThread) => {
             
             // Initial Message, from Bot, along with requested Role details
             const InitialBotMessage = new EmbedBuilder().setTitle(`New Application Created`)
             .addFields(
-                { name: `Application Creator:`, value: `${selectInteraction.user.tag} (<@${selectInteraction.user.id}>)` },
+                { name: `Application Creator:`, value: `${selectInteraction.user.username} (<@${selectInteraction.user.id}>)` },
                 { name: `Application Type:`, value: `${ApplicationKeyToName[SelectedApplication]}` },
                 { name: `\u200B`, value: `The Staff Team are aware of the creation of this Application, and will be checking it once you have filled out the questions required.` }
             )

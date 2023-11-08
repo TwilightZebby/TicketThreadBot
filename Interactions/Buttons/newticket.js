@@ -2,6 +2,7 @@ const { ButtonInteraction } = require("discord.js");
 const TicketGeneral = require('../../BotModules/Tickets/TicketGeneral.js');
 const TicketMonthlyRole = require('../../BotModules/Tickets/TicketMonthlyRole.js');
 const TicketApplication = require('../../BotModules/Tickets/TicketApplication.js');
+const TicketBugReport = require('../../BotModules/Tickets/TicketBugReport.js')
 const TicketReport = require('../../BotModules/Tickets/TicketReport.js');
 
 module.exports = {
@@ -40,6 +41,10 @@ module.exports = {
 
             case "monthly-role":
                 await TicketMonthlyRole.promptUser(buttonInteraction);
+                break;
+
+            case "bug-report":
+                await TicketBugReport.promptUser(buttonInteraction);
                 break;
 
             case "report":

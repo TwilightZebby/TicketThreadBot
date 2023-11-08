@@ -68,7 +68,7 @@ module.exports = {
             ])
         ]);
 
-        await selectInteraction.update({ components: [typeSelect], content: `*Selected Member to Report:* <@${UserSelected.id}> ( ${UserSelected.tag} )\n\nPlease use the Select Menu attached to choose which type(s) of Report you want to open.\nYou can pick either one or multiple types that are relevant to what you want to report.` });
+        await selectInteraction.update({ components: [typeSelect], content: `*Selected Member to Report:* <@${UserSelected.id}> ( ${UserSelected.username} )\n\nPlease use the Select Menu attached to choose which type(s) of Report you want to open.\nYou can pick either one or multiple types that are relevant to what you want to report.` });
         return;
     },
 
@@ -112,15 +112,15 @@ module.exports = {
             autoArchiveDuration: ThreadAutoArchiveDuration.OneWeek,
             invitable: false,
             name: `${modalInteraction.user.username} - Member Report - ${now.getDate()}.${now.getMonth() + 1}`,
-            reason: `New Member Report opened by ${modalInteraction.user.tag} (ID: ${modalInteraction.user.id})`
+            reason: `New Member Report opened by ${modalInteraction.user.username} (ID: ${modalInteraction.user.id})`
         })
         .then(async (TicketThread) => {
             
             // Initial Message, from Bot
             const InitialBotMessage = new EmbedBuilder().setTitle(`New Report Opened`)
             .addFields(
-                { name: `Report Creator:`, value: `${modalInteraction.user.tag} (<@${modalInteraction.user.id}>)` },
-                { name: `Member Being Reported:`, value: `${SelectedMember.user.tag} (<@${SelectedMember.id}> - User ID: \`${SelectedMember.id}\`)` },
+                { name: `Report Creator:`, value: `${modalInteraction.user.username} (<@${modalInteraction.user.id}>)` },
+                { name: `Member Being Reported:`, value: `${SelectedMember.user.username} (<@${SelectedMember.id}> - User ID: \`${SelectedMember.id}\`)` },
                 { name: `Ticket Type:`, value: `Report` },
                 { name: `Report Type(s):`, value: `${SelectedReportTypes.split("-").join(", ")}` },
                 { name: `\u200B`, value: `The Staff Team are notified of the creation of this Report, and will be investigating as soon as they can.\nWhile you're waiting for a response, if you have anything else to add, please do so below your initial reason.` }
@@ -153,8 +153,8 @@ module.exports = {
             const ReportLogEmbed = new EmbedBuilder().setColor(Colors.Red)
             .setTitle(`New Member Report Opened`)
             .addFields(
-                { name: `Report Creator`, value: `${modalInteraction.user.tag} (<@${modalInteraction.user.id}> - User ID: \`${modalInteraction.user.id}\`)` },
-                { name: `Member Being Reported:`, value: `${SelectedMember.user.tag} (<@${SelectedMember.id}> - User ID: \`${SelectedMember.id}\`)` },
+                { name: `Report Creator`, value: `${modalInteraction.user.username} (<@${modalInteraction.user.id}> - User ID: \`${modalInteraction.user.id}\`)` },
+                { name: `Member Being Reported:`, value: `${SelectedMember.user.username} (<@${SelectedMember.id}> - User ID: \`${SelectedMember.id}\`)` },
                 { name: `Report Type(s):`, value: `${SelectedReportTypes.split("-").join(", ")}` },
                 { name: `Report Ticket:`, value: `Thread Mention: <#${TicketThread.id}>\nThread Link: ${TicketThread.url}` },
                 { name: `Initial Reason:`, value: InputtedReason.length > 1900 ? `${InputtedReason.slice(0, 1900)}...` : `${InputtedReason}` }
