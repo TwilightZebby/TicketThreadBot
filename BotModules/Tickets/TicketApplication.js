@@ -87,7 +87,7 @@ const YouTuberAppEmbed = new EmbedBuilder().setColor(Colors.DarkAqua)
 .addFields(
     {
         name: `Requirements`,
-        value: `• Have at least x susbcribers on YouTube`
+        value: `• Have at least x subscribers on YouTube`
     },
     {
         name: `Questions`,

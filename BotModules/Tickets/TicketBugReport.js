@@ -2,7 +2,7 @@ const { ButtonInteraction, ModalBuilder, ActionRowBuilder, TextInputBuilder, Tex
 const { StaffRoleID } = require('../../config.js');
 
 /** Model for User to describe their Ticket */
-const TicketModel = new ModalBuilder().setCustomId(`general-ticket`).setTitle(`Create Bug Report`).addComponents([
+const TicketModel = new ModalBuilder().setCustomId(`bug-report`).setTitle(`Create Bug Report`).addComponents([
     new ActionRowBuilder().addComponents([ new TextInputBuilder().setCustomId(`bug-summary`).setLabel(`Summary of Bug`).setMaxLength(150).setRequired(true).setStyle(TextInputStyle.Short).setPlaceholder("A short 1 sentence summary of what the bug is") ]),
     new ActionRowBuilder().addComponents([ new TextInputBuilder().setCustomId(`reproduction-steps`).setLabel(`Reproduction Steps`).setMaxLength(2000).setRequired(true).setStyle(TextInputStyle.Paragraph).setPlaceholder("Steps of what to do to reproduce/repeat the bug") ]),
     new ActionRowBuilder().addComponents([ new TextInputBuilder().setCustomId(`expected-result`).setLabel(`Expected Result`).setMaxLength(200).setRequired(true).setStyle(TextInputStyle.Short).setPlaceholder("What should have happened (if the bug didn't exist)?") ]),
